@@ -1,13 +1,41 @@
+/*The MIT License (MIT)
+
+Copyright (c) 2017 chrismaughan.com
+
+https://github.com/cmaughan/
+https://chrismaughan.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
+
 #pragma once
 
-#include <stdio.h>
+#include <iterator>
+#include <cassert>
 
 // An STL-friendly GapBuffer
 // This is my attempt at a Gap buffer which looks a bit like a vector
 // The idea is that to the client, it looks like contiguous memory, but internally there is a gap
-// Any modification operations involve moving (and possibly) resizing the gap
+// Any modification operations may involve moving (and possibly) resizing the gap
 // A Gap buffer is a special type of buffer that has favourable performance when inserting/removing entries
+// in a local region.  Thus memory moving cost is amortised
 // Editors like emacs use it to efficiently manage an edit buffer.
+// For the curious, you can ask emacs for the gap position and size by evaluating (gap-size), (gap-position)
+
 template <class T, class A = std::allocator<T>>
 class GapBuffer
 {

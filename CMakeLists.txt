@@ -26,12 +26,14 @@ add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
 SET(SOURCES
     gap_buffer.test.cpp
     gap_buffer.h
+    README.md
 )
 
+# Make a test project
 enable_testing()
 
 project(gapbuffer_tests)
-# Now simply link against gtest or gtest_main as needed. Eg
+add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 add_executable(gapbuffer_tests ${SOURCES})
 add_dependencies(gapbuffer_tests gtest)
 target_link_libraries(gapbuffer_tests gtest gtest_main)
