@@ -24,7 +24,9 @@ TEST(GapBuffer, PushPop)
     out = buffer.string(true);
     ASSERT_EQ(out, "|9|");
 
+#ifdef _MSC_VER
     EXPECT_DEATH(buffer.pop_back(), ".*!empty.*");
+#endif
 }
 
 TEST(GapBuffer, FrontBack)
