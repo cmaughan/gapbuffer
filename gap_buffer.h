@@ -89,7 +89,7 @@ public:
 
         iterator& operator+=(size_type rhs) { p += rhs; return *this; }
         iterator operator+(size_type rhs) const { return iterator(buffer, p + rhs); }
-        friend iterator operator+(size_type lhs, const iterator& rhs) { return iterator(buffer, lhs + rhs.p); }
+        friend iterator operator+(size_type lhs, const iterator& rhs) { return iterator(lhs.buffer, lhs + rhs.p); }
         iterator& operator-=(size_type rhs) { p -= rhs; return *this; }
         iterator operator-(size_type rhs) const { return iterator(buffer, p - rhs); }
         difference_type operator-(iterator itr) const { return p - itr.p;  }
@@ -138,7 +138,7 @@ public:
 
         const_iterator& operator+=(size_type rhs) { p += rhs; return *this; }
         const_iterator operator+(size_type rhs) const { return const_iterator(buffer, p + rhs); }
-        friend const_iterator operator+(size_type lhs, const const_iterator& rhs) { return const_iterator(buffer, lhs + rhs.p); }
+        friend const_iterator operator+(size_type lhs, const const_iterator& rhs) { return const_iterator(lhs.buffer, lhs + rhs.p); }
         const_iterator& operator-=(size_type rhs) { p -= rhs; return *this; }
         const_iterator operator-(size_type rhs) const { return const_iterator(buffer, p - rhs); }
         difference_type operator-(const_iterator itr) const { return p - itr.p;  }
