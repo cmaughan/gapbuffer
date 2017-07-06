@@ -28,7 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <iterator>
 #include <cassert>
 #include <climits>
-#include <cstring>
+#include <string>
 
 // An STL-friendly GapBuffer
 // This is my attempt at a Gap buffer which looks a bit like a vector

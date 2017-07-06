@@ -93,6 +93,22 @@ TEST(GapBuffer, Resize)
     ASSERT_TRUE(out == "A s");
 }
 
+TEST(GapBuffer, Find)
+{
+    GapBuffer<char> buffer(0, 4);
+
+    std::string foo("The big brown fox jumped over the lazy dog.");
+    buffer.assign(foo.begin(), foo.end());
+
+    std::string skip("Th");
+    auto pos = buffer.find_first_not_of(buffer.begin(), buffer.end(), skip.begin(), skip.end());
+    ASSERT_EQ(pos, (buffer.begin() + 2));
+
+    std::string search("o");
+    pos = buffer.find_first_of(buffer.begin(), buffer.end(), search.begin(), search.end());
+    ASSERT_EQ(pos, (buffer.begin() + 10));
+}
+
 TEST(GapBuffer, Manipulations)
 {
     GapBuffer<char> buffer(0, 4);
