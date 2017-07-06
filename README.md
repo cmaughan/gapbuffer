@@ -2,7 +2,7 @@
 If you arrived here by accident, and want to know what a gap buffer is:
 https://en.wikipedia.org/wiki/Gap_buffer
 
-This is my attempt at an STL-friendly gap buffer.  It helped me understand STL containers a little better.
+This is my attempt at an STL-friendly gap buffer.  It helped me understand STL containers a little more.
 This type of data structure is usually used to manipulate text efficiently, when edits occur in the same locality.
 Since this implementation is a templated container, you could store anything in it - not just chars.
 Most of the standard STL operations are included.  
@@ -53,8 +53,8 @@ ctest -V
 ```
 
 ## To do
-- There are a few missing container functions at the bottom of gap_buffer.h.  Fill the in and send me a PR ;)
-- I haven't done any performance tests yet.
-- EnsureGapPosAndSize could probably be more efficient if the gap is both moving and being resize.
-- More unit tests
+- There are a few missing container functions at the bottom of gap_buffer.h.  Fill them in and send me a PR ;)
+- Performance testing.
+- EnsureGapPosAndSize could probably be more efficient if the gap is both moving and being resized.
+- More unit tests.
 
