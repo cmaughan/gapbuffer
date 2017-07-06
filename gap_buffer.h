@@ -24,8 +24,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 #pragma once
 
+#include <algorithm>
 #include <iterator>
 #include <cassert>
+#include <climits>
+#include <cstring>
 
 // An STL-friendly GapBuffer
 // This is my attempt at a Gap buffer which looks a bit like a vector
@@ -87,7 +90,7 @@ public:
         iterator& operator+=(size_type rhs) { p += rhs; return *this; }
         iterator operator+(size_type rhs) const { return iterator(buffer, p + rhs); }
         friend iterator operator+(size_type lhs, const iterator& rhs) { return iterator(buffer, lhs + rhs.p); }
-        iterator& operator-=(size_type rhs) { p -= rhs; return *this }
+        iterator& operator-=(size_type rhs) { p -= rhs; return *this; }
         iterator operator-(size_type rhs) const { return iterator(buffer, p - rhs); }
         difference_type operator-(iterator itr) const { return p - itr.p;  }
 
@@ -106,8 +109,8 @@ public:
     public:
         typedef typename A::difference_type difference_type;
         typedef typename A::value_type value_type;
-        typedef typename const A::reference reference;
-        typedef typename const A::pointer pointer;
+        typedef typename A::reference reference;
+        typedef typename A::pointer pointer;
         typedef std::random_access_iterator_tag iterator_category; //or another tag
 
         bool skipGap = true;
@@ -136,7 +139,7 @@ public:
         const_iterator& operator+=(size_type rhs) { p += rhs; return *this; }
         const_iterator operator+(size_type rhs) const { return const_iterator(buffer, p + rhs); }
         friend const_iterator operator+(size_type lhs, const const_iterator& rhs) { return const_iterator(buffer, lhs + rhs.p); }
-        const_iterator& operator-=(size_type rhs) { p -= rhs; return *this }
+        const_iterator& operator-=(size_type rhs) { p -= rhs; return *this; }
         const_iterator operator-(size_type rhs) const { return const_iterator(buffer, p - rhs); }
         difference_type operator-(const_iterator itr) const { return p - itr.p;  }
 
