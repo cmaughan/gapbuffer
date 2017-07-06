@@ -1,0 +1,63 @@
+language: cpp
+dist: trusty
+
+linux-gcc: &linux-gcc
+  os: linux
+  compiler: gcc
+  addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      packages:
+        - g++-6
+        - cmake
+        - freeglut3-dev
+        
+linux-clang: &linux-clang
+  os: linux
+  compiler: clang
+  addons:
+    apt:
+      sources:
+          - ubuntu-toolchain-r-test
+      packages:
+        - clang-3.8
+        - freeglut3-dev
+        - cmake
+        - g++-6
+        
+osx-gcc: &osx-gcc
+  os: osx
+  osx_image: xcode8.2
+  compiler: gcc
+
+osx-clang: &osx-clang
+  os: osx
+  osx_image: xcode8.2
+  compiler: clang gcc
+
+matrix:
+  include:
+    - <<: *linux-gcc
+      env: BUILD_TYPE=Debug TEST_TARGET=test CMAKE_C_COMPILER=gcc-6 CMAKE_CXX_COMPILER=g++-6
+    - <<: *linux-gcc
+      env: BUILD_TYPE=Release TEST_TARGET=test CMAKE_C_COMPILER=gcc-6 CMAKE_CXX_COMPILER=g++-6
+    - <<: *linux-clang
+      env: BUILD_TYPE=Debug TEST_TARGET=test CMAKE_C_COMPILER=clang-3.8 CMAKE_CXX_COMPILER=clang++-3.8
+    - <<: *linux-clang
+      env: BUILD_TYPE=Release TEST_TARGET=test CMAKE_C_COMPILER=clang-3.8 CMAKE_CXX_COMPILER=clang++-3.8
+    - <<: *linux-gcc
+      env: BUILD_TYPE=Coverage TEST_TARGET=gen-cov CMAKE_C_COMPILER=gcc-6 CMAKE_CXX_COMPILER=g++-6 GCOV=gcov-6
+    - <<: *osx-clang
+      env: BUILD_TYPE=Debug TEST_TARGET=test CMAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++
+    - <<: *osx-clang
+      env: BUILD_TYPE=Release TEST_TARGET=test CMAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++
+      
+install: |
+  source scripts/travis_install.sh
+
+script: |
+  source scripts/travis_script.sh
+
+after_success: |
+  source ${TRAVIS_BUILD_DIR}/scripts/travis_success.sh    

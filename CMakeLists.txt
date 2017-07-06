@@ -5,6 +5,10 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if (CMAKE_BUILD_TYPE MATCHES Coverage)
+    set (CMAKE_BUILD_TYPE "Debug")
+endif()
+
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
