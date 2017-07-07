@@ -1,4 +1,10 @@
-## Gap Buffer
+Gap Buffer
+==========
+
+[![Build Status](https://travis-ci.org/cmaughan/gapbuffer.svg?branch=master)](https://travis-ci.org/cmaughan/gapbuffer)
+[![Coverage Status](https://coveralls.io/repos/github/cmaughan/gapbuffer/badge.svg?branch=master&bust=1)](https://coveralls.io/github/cmaughan/gapbuffer?branch=master)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cmaughan/gapbuffer/blob/master/LICENSE)
+
 If you arrived here by accident, and want to know what a gap buffer is:
 https://en.wikipedia.org/wiki/Gap_buffer
 
@@ -17,7 +23,8 @@ to split the search into 2 efficient loops.
 Unit tests are provided to check on the basic behavior.  This project just builds a test executable which runs the tests.  Just include
 gap_buffer.h in your project to use it.
 
-## Example
+Example
+-------
 ```
 GapBuffer<char> myBuffer(0, 4); // Empty buffer, with 4 character gap
 myBuffer.push_back('A');
@@ -41,7 +48,8 @@ assert(*myBuffer.begin() == 'B');
 ```
 See the unit tests for more examples.
 
-## Building
+Building
+--------
 On windows there is a simple config.bat file for Visual Studio 2017.  On other systems, you should just be able to use CMake 
 in the usual way.  Example of an out-of-source build setup:
 ```
@@ -52,7 +60,8 @@ cmake --build .
 ctest -V
 ```
 
-## To do
+To do
+-----
 - There are a few missing container functions at the bottom of gap_buffer.h.  Fill them in and send me a PR ;)
 - Performance testing.
 - EnsureGapPosAndSize could probably be more efficient if the gap is both moving and being resized.
