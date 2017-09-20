@@ -31,6 +31,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <cstring>
 #include <string>
 
+#ifdef _DEBUG
+#define DEBUG_FILL_GAP for (auto* pCh = m_pGapStart; pCh < m_pGapEnd; pCh++) { *pCh = '@'; }
+#else
+#define DEBUG_FILL_GAP
+#endif
+
 // An STL-friendly GapBuffer
 // This is my attempt at a Gap buffer which looks a bit like a vector
 // The idea is that to the client, it looks like contiguous memory, but internally there is a gap
@@ -71,7 +77,10 @@ public:
         typedef std::random_access_iterator_tag iterator_category; //or another tag
 
         bool skipGap = true;
+        // Note: p is measured in actual characters, not entire buffer size.
+        // i.e. p skips the gap, and is always less than size()!
         size_t p = 0;
+
         GapBuffer<T>& buffer;
 
         iterator(GapBuffer<T>& buff, size_t ptr, bool skip = true) : buffer(buff), p(ptr), skipGap(skip)  { };
@@ -300,6 +309,8 @@ public:
         m_pGapEnd = m_pGapStart + newGapSize;
         m_pStart = pNewStart;
         m_pEnd = pNewStart + bufferSize;
+
+        DEBUG_FILL_GAP;
     }
 
     // Return a string version of the gap, optionally showing the gap size
@@ -310,7 +321,7 @@ public:
        
         if (m_pGapStart - m_pStart)
         {
-            str.append(m_pStart, m_pGapStart - m_pStart);
+            str.append((char*)m_pStart, (char*)(m_pGapStart - m_pStart));
         }
 
         if (showGap)
@@ -321,7 +332,7 @@ public:
         }
         if (m_pEnd - m_pGapEnd)
         {
-            str.append(m_pGapEnd, m_pEnd - m_pGapEnd);
+            str.append((char*)m_pGapEnd, (char*)(m_pEnd - m_pGapEnd));
         }
         return str;
     }
@@ -346,6 +357,8 @@ public:
 
         assert(m_pGapStart <= m_pEnd);
         assert(size() >= size_t(spaceRequired));
+
+        DEBUG_FILL_GAP;
     }
 
     void assign(std::initializer_list<T> list)
@@ -372,6 +385,8 @@ public:
 
         assert(m_pGapStart <= m_pEnd);
         assert(size() >= size_t(count));
+
+        DEBUG_FILL_GAP;
     }
 
     template<class iter>
@@ -392,6 +407,8 @@ public:
 
         m_pGapStart += spaceRequired;
 
+        DEBUG_FILL_GAP;
+
         return iterator(*this, pt.p);
     }
 
@@ -405,6 +422,8 @@ public:
             count = -count;
         m_pGapEnd += count;
 
+        DEBUG_FILL_GAP;
+
         return iterator(*this, start.p);
     }
     
@@ -413,6 +432,8 @@ public:
         assert(start.p < size());
         MoveGap(start.p);
         m_pGapEnd++;
+
+        DEBUG_FILL_GAP;
 
         return iterator(*this, start.p);
     }
@@ -514,30 +535,40 @@ public:
     template<class ForwardIt>
     T* find_first_of(T* pStart,  T* pEnd, ForwardIt s_first, ForwardIt s_last) const
     {
-        while (pStart < m_pGapStart)
+        assert(pStart <= pEnd);
+        while (pStart < m_pGapStart &&
+            pStart < pEnd)
         {
             for (ForwardIt it = s_first; it != s_last; ++it) 
             {
                 if (*pStart == *it) 
                 {
+                    assert(pStart <= pEnd);
                     return pStart;
                 }
             }
             pStart++;
         }
 
-        pStart = m_pGapEnd;
+        // Skip the gap
+        if (pStart >= m_pGapStart && pStart < m_pGapEnd)
+        {
+            pStart = m_pGapEnd;
+        }
+
         while (pStart < m_pEnd)
         {
             for (ForwardIt it = s_first; it != s_last; ++it) 
             {
                 if (*pStart == *it) 
                 {
+                    assert(pStart <= pEnd);
                     return pStart;
                 }
             }
             pStart++;
         }
+        assert(pStart <= pEnd);
         return pEnd;
     }
 
@@ -545,7 +576,8 @@ public:
     T* find_first_not_of(T* pStart,  T* pEnd, ForwardIt s_first, ForwardIt s_last) const
     {
         bool found;
-        while (pStart < m_pGapStart)
+        while (pStart < m_pGapStart &&
+            pStart < pEnd)
         {
             found = false;
             for (ForwardIt it = s_first; it != s_last; ++it) 
@@ -563,8 +595,13 @@ public:
             pStart++;
         }
 
-        pStart = m_pGapEnd;
-        while (pStart < m_pEnd)
+        // Skip the gap
+        if (pStart >= m_pGapStart && pStart < m_pGapEnd)
+        {
+            pStart = m_pGapEnd;
+        }
+
+        while (pStart < pEnd)
         {
             found = false;
             for (ForwardIt it = s_first; it != s_last; ++it)
@@ -589,7 +626,9 @@ public:
     const_iterator find_first_of(const_iterator first, const_iterator last,
                           ForwardIt s_first, ForwardIt s_last) const
     {
+        assert(first <= last);
         T* pVal = find_first_of(GetGaplessPtr(first.p), GetGaplessPtr(last.p), s_first, s_last);
+        assert(GetGaplessPtr(first.p) <= pVal);
         return const_iterator(*this, GetGaplessOffset(pVal));
     }
 
@@ -605,7 +644,9 @@ public:
     iterator find_first_of(iterator first, iterator last,
                           ForwardIt s_first, ForwardIt s_last) 
     {
+        assert(first <= last);
         T* pVal = find_first_of(GetGaplessPtr(first.p), GetGaplessPtr(last.p), s_first, s_last);
+        assert(GetGaplessPtr(first.p) <= pVal);
         return iterator(*this, GetGaplessOffset(pVal));
     }
 
@@ -707,6 +748,7 @@ private:
         // We are in the right place
         if (pPos == m_pGapEnd)
         {
+            DEBUG_FILL_GAP;
             return;
         }
 
@@ -727,6 +769,7 @@ private:
             m_pGapStart += pPos - m_pGapEnd;
             m_pGapEnd = pPos;
         }
+        DEBUG_FILL_GAP;
     }
 };
 

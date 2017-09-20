@@ -4,7 +4,7 @@
  
 TEST(GapBuffer, PushPop)
 {
-    GapBuffer<char> buffer(0, 4);
+    GapBuffer<unsigned char> buffer(0, 4);
     buffer.push_back('a');
     buffer.push_back('b');
     buffer.push_back('c');
@@ -31,7 +31,7 @@ TEST(GapBuffer, PushPop)
 
 TEST(GapBuffer, FrontBack)
 {
-    GapBuffer<char> buffer;
+    GapBuffer<unsigned char> buffer;
 
     std::string foo("Hello");
     buffer.insert(buffer.begin(), foo.begin(), foo.end());
@@ -45,7 +45,7 @@ TEST(GapBuffer, FrontBack)
 
 TEST(GapBuffer, Assign)
 {
-    GapBuffer<char> buffer(0, 4);
+    GapBuffer<unsigned char> buffer(0, 4);
 
     std::string foo("Hello");
     buffer.assign(foo.begin(), foo.end());
@@ -79,7 +79,7 @@ TEST(GapBuffer, Assign)
 
 TEST(GapBuffer, Resize)
 {
-    GapBuffer<char> buffer(0, 4);
+    GapBuffer<unsigned char> buffer(0, 4);
 
     std::string str("A sentence containing text.");
     buffer.assign(str.begin(), str.end());
@@ -95,7 +95,7 @@ TEST(GapBuffer, Resize)
 
 TEST(GapBuffer, Find)
 {
-    GapBuffer<char> buffer(0, 4);
+    GapBuffer<unsigned char> buffer(0, 4);
 
     std::string foo("The big brown fox jumped over the lazy dog.");
     buffer.assign(foo.begin(), foo.end());
@@ -111,7 +111,7 @@ TEST(GapBuffer, Find)
 
 TEST(GapBuffer, Manipulations)
 {
-    GapBuffer<char> buffer(0, 4);
+    GapBuffer<unsigned char> buffer(0, 4);
 
     // Empty buffer
     ASSERT_TRUE(buffer.size() == 0);
