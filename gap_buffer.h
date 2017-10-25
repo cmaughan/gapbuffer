@@ -321,7 +321,7 @@ public:
        
         if (m_pGapStart - m_pStart)
         {
-            str.append((char*)m_pStart, (char*)(m_pGapStart - m_pStart));
+            str.append((const char*)m_pStart, (size_type)(m_pGapStart - m_pStart));
         }
 
         if (showGap)
@@ -332,7 +332,7 @@ public:
         }
         if (m_pEnd - m_pGapEnd)
         {
-            str.append((char*)m_pGapEnd, (char*)(m_pEnd - m_pGapEnd));
+            str.append((const char*)m_pGapEnd, (size_type)(m_pEnd - m_pGapEnd));
         }
         return str;
     }
